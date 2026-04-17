@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: b1c8d96a7dd309f449548f6d5dc5c1ec
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 310092
+  packageName: Humans army - Guard
+  packageVersion: 1.0
+  assetPath: Assets/SimpleAssets/Humans/Guard/Animations/GuardController.controller
+  uploadId: 732011

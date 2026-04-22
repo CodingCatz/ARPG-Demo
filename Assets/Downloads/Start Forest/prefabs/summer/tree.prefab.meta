@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ac57d0a1435aef945b362f2a21ad26b4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 42578
+  packageName: LowPoly Forest Pack
+  packageVersion: 1.0
+  assetPath: Assets/Start Forest/prefabs/summer/tree.prefab
+  uploadId: 74450

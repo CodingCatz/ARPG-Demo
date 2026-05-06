@@ -73,3 +73,7 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Asset Store pack with FBX > 100MB (GitHub hard limit). Re-import from Asset Store locally.
+/Assets/Downloads/KoreanTraditionalMartialArts/
+/Assets/Downloads/KoreanTraditionalMartialArts.meta

@@ -81,7 +81,7 @@ public class PlayerCtrl : MonoBehaviour
 
     void AnimaUpdate()
     {
-
+        animaCtrl.SetBool("IsMoving", IsMoving);
     }
     #endregion 生命週期
 

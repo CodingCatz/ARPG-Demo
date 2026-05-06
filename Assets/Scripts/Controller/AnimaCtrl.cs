@@ -20,5 +20,13 @@ public class AnimaCtrl : MonoBehaviour
         
     }
 
+    public void SetBool(string name, bool val)
+    {
+        animator.SetBool(name, val);
+    }
 
+    public void SetFloat(string name, float val)
+    {
+        animator.SetFloat(name, val);
+    }
 }

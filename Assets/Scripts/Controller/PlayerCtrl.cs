@@ -43,6 +43,9 @@ public class PlayerCtrl : MonoBehaviour
     /// 從輸入取得的方向向量
     /// </summary>
     public Vector2 MoveInput => InputCtrl.Play.Move.ReadValue<Vector2>();
+    /// <summary>
+    /// 面向的方向向量
+    /// </summary>
     public Vector3 FacingVector
     {
         get 
@@ -68,14 +71,14 @@ public class PlayerCtrl : MonoBehaviour
     private void OnEnable()
     {
         InputCtrl.Play.Enable();
-
+        //操作行為事件訂閱
         InputCtrl.Play.Jump.performed += Jump;
     }
 
     private void OnDisable()
     {
         InputCtrl.Play.Disable();
-
+        //操作行為事件訂閱取消
         InputCtrl.Play.Jump.performed -= Jump;
     }
 
@@ -85,14 +88,18 @@ public class PlayerCtrl : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// 狀態刷新
+    /// </summary>
     void Update()
     {
         AnimaUpdate();
         Rota();
         Movement();
     }
-
+    /// <summary>
+    /// 動畫更新
+    /// </summary>
     void AnimaUpdate()
     {
         animaCtrl.SetBool("IsMoving", IsMoving);
@@ -100,24 +107,29 @@ public class PlayerCtrl : MonoBehaviour
         
     }
     #endregion 生命週期
-
+    /// <summary>
+    /// 動態套用
+    /// </summary>
     void Movement()
     {
         _velocity.z = transform.forward.z * MoveSpeed;
         _velocity.x = transform.forward.x * MoveSpeed;
         //重力
-        if (charCtrl.isGrounded)
+        if (charCtrl.isGrounded && _velocity.y < 0)
         {
-            _velocity.y = -1; 
+            _velocity.y = -1f; 
         }
         else
         {
-            _velocity.y -= G;
+            _velocity.y -= G * Time.deltaTime;
         }
 
         charCtrl.Move(Velocity);
     }
 
+    /// <summary>
+    /// 轉向事件
+    /// </summary>
     void Rota()
     {
         if (!IsMoving) return;
@@ -125,6 +137,10 @@ public class PlayerCtrl : MonoBehaviour
         charCtrl.transform.rotation = Quaternion.LookRotation(FacingVector);
     }
 
+    /// <summary>
+    /// 跳躍事件
+    /// </summary>
+    /// <param name="context">接收輸入</param>
     void Jump(InputAction.CallbackContext context)
     {
         //向上

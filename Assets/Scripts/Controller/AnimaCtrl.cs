@@ -14,17 +14,26 @@ public class AnimaCtrl : MonoBehaviour
     private Animator animator => _animator ??= GetComponent<Animator>();
     #endregion 基礎元建
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         
     }
 
+    /// <summary>
+    /// 設置動畫布林
+    /// </summary>
+    /// <param name="name">名稱</param>
+    /// <param name="val">值</param>
     public void SetBool(string name, bool val)
     {
         animator.SetBool(name, val);
     }
 
+    /// <summary>
+    /// 設置動畫小數
+    /// </summary>
+    /// <param name="name">名稱</param>
+    /// <param name="val">值</param>
     public void SetFloat(string name, float val)
     {
         animator.SetFloat(name, val);

@@ -28,7 +28,10 @@ public class PlayerCtrl : MonoBehaviour
     private Controls _controls;
     private Vector3 _facingVector;
     [SerializeField]
-    private float _moveSpeed = 3f;
+    private float _moveSpeed = 5f;
+    [SerializeField]
+    private float _jumpHeight = 3f;
+    private Vector3 _velocity;
     #endregion 基本參數
 
     #region 公用參數
@@ -53,17 +56,27 @@ public class PlayerCtrl : MonoBehaviour
     /// 依據方向向量輸入判定是否在移動中
     /// </summary>
     public bool IsMoving => MoveInput != Vector2.zero;
+    public float MoveMulti => MoveInput.magnitude;
+    public float MoveSpeed => MoveInput.magnitude * _moveSpeed;
+    public float G => Mathf.Abs(Physics.gravity.y);
+    public float H => _jumpHeight;
+
+    public Vector3 Velocity => _velocity * Time.deltaTime;
     #endregion 公用參數
 
     #region 生命週期
     private void OnEnable()
     {
         InputCtrl.Play.Enable();
+
+        InputCtrl.Play.Jump.performed += Jump;
     }
 
     private void OnDisable()
     {
         InputCtrl.Play.Disable();
+
+        InputCtrl.Play.Jump.performed -= Jump;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -76,26 +89,45 @@ public class PlayerCtrl : MonoBehaviour
     void Update()
     {
         AnimaUpdate();
-        Move();
+        Rota();
+        Movement();
     }
 
     void AnimaUpdate()
     {
         animaCtrl.SetBool("IsMoving", IsMoving);
+        animaCtrl.SetFloat("MoveMulti", MoveMulti);
+        
     }
     #endregion 生命週期
 
-    void Move()
+    void Movement()
+    {
+        _velocity.z = transform.forward.z * MoveSpeed;
+        _velocity.x = transform.forward.x * MoveSpeed;
+        //重力
+        if (charCtrl.isGrounded)
+        {
+            _velocity.y = -1; 
+        }
+        else
+        {
+            _velocity.y -= G;
+        }
+
+        charCtrl.Move(Velocity);
+    }
+
+    void Rota()
     {
         if (!IsMoving) return;
         //轉向
         charCtrl.transform.rotation = Quaternion.LookRotation(FacingVector);
-        //前進
-        charCtrl.Move(transform.forward * _moveSpeed * Time.deltaTime);
     }
 
-    void Jump()
+    void Jump(InputAction.CallbackContext context)
     {
-
+        //向上
+        _velocity.y = Mathf.Sqrt(2 * G * H);
     }
 }

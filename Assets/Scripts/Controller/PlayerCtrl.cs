@@ -31,6 +31,10 @@ public class PlayerCtrl : MonoBehaviour
     private float _moveSpeed = 5f;
     [SerializeField]
     private float _jumpHeight = 3f;
+    private float _jumpPower = 1f;
+    [SerializeField]
+    private int _airJumpCountMax = 1;
+    private int _airJumpCount;
     private Vector3 _velocity;
     #endregion 基本參數
 
@@ -59,12 +63,35 @@ public class PlayerCtrl : MonoBehaviour
     /// 依據方向向量輸入判定是否在移動中
     /// </summary>
     public bool IsMoving => MoveInput != Vector2.zero;
+    /// <summary>
+    /// 移動倍率(標準化 0~1)
+    /// </summary>
     public float MoveMulti => MoveInput.magnitude;
+    /// <summary>
+    /// 當前移動可達速度
+    /// </summary>
     public float MoveSpeed => MoveInput.magnitude * _moveSpeed;
+    /// <summary>
+    /// 重力值
+    /// </summary>
     public float G => Mathf.Abs(Physics.gravity.y);
-    public float H => _jumpHeight;
-
+    /// <summary>
+    /// 當前跳躍可達高度
+    /// </summary>
+    public float H => _jumpHeight * _jumpPower;
+    /// <summary>
+    /// 是否處於觸地狀態
+    /// </summary>
+    public bool IsGrounded => charCtrl.isGrounded && _velocity.y < 0;
+    /// <summary>
+    /// 是否可以執行空中跳躍
+    /// </summary>
+    public bool CanAirJump => _airJumpCount > 0;
+    /// <summary>
+    /// 用於位移的動能
+    /// </summary>
     public Vector3 Velocity => _velocity * Time.deltaTime;
+    public float VelocityY => _velocity.y;
     #endregion 公用參數
 
     #region 生命週期
@@ -103,8 +130,9 @@ public class PlayerCtrl : MonoBehaviour
     void AnimaUpdate()
     {
         animaCtrl.SetBool("IsMoving", IsMoving);
+        animaCtrl.SetBool("IsGrounded", IsGrounded);
         animaCtrl.SetFloat("MoveMulti", MoveMulti);
-        
+        animaCtrl.SetFloat("VelocityY", VelocityY);
     }
     #endregion 生命週期
     /// <summary>
@@ -115,9 +143,11 @@ public class PlayerCtrl : MonoBehaviour
         _velocity.z = transform.forward.z * MoveSpeed;
         _velocity.x = transform.forward.x * MoveSpeed;
         //重力
-        if (charCtrl.isGrounded && _velocity.y < 0)
+        if (IsGrounded)
         {
-            _velocity.y = -1f; 
+            _velocity.y = -1f;
+            _airJumpCount = _airJumpCountMax;
+            _jumpPower = 1f;
         }
         else
         {
@@ -143,7 +173,22 @@ public class PlayerCtrl : MonoBehaviour
     /// <param name="context">接收輸入</param>
     void Jump(InputAction.CallbackContext context)
     {
+        if (IsGrounded)
+        {
+            JumpHandle();
+        }
+        else if (CanAirJump) 
+        {
+            _airJumpCount--;
+            _jumpPower = 0.5f;
+            JumpHandle();
+        }
+    }
+
+    void JumpHandle()
+    {
         //向上
         _velocity.y = Mathf.Sqrt(2 * G * H);
+        animaCtrl.SetTrigger("JumpTrigger");
     }
 }

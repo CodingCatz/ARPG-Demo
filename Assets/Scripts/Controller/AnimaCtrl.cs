@@ -20,6 +20,15 @@ public class AnimaCtrl : MonoBehaviour
     }
 
     /// <summary>
+    /// 設置動畫觸發
+    /// </summary>
+    /// <param name="name">名稱</param>
+    public void SetTrigger(string name)
+    {
+        animator.SetTrigger(name);
+    }
+
+    /// <summary>
     /// 設置動畫布林
     /// </summary>
     /// <param name="name">名稱</param>

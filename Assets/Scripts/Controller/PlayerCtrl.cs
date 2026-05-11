@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 //預設必須的元件
@@ -36,6 +37,9 @@ public class PlayerCtrl : MonoBehaviour
     private int _airJumpCountMax = 1;
     private int _airJumpCount;
     private Vector3 _velocity;
+    private int _combo;
+    private bool _isAttacking;
+    private bool _inComboWindow;
     #endregion 基本參數
 
     #region 公用參數
@@ -59,6 +63,10 @@ public class PlayerCtrl : MonoBehaviour
             return _facingVector; 
         }
     }
+    /// <summary>
+    /// 非處於會排他行動狀態
+    /// </summary>
+    public bool InAction => IsAttacking;
     /// <summary>
     /// 依據方向向量輸入判定是否在移動中
     /// </summary>
@@ -92,6 +100,22 @@ public class PlayerCtrl : MonoBehaviour
     /// </summary>
     public Vector3 Velocity => _velocity * Time.deltaTime;
     public float VelocityY => _velocity.y;
+
+    public int Combo
+    {
+        get
+        {
+            return _combo;
+        }
+        set
+        {
+            _combo = value;
+            Debug.Log(_combo);
+            if (_combo > 2) _combo = 1;
+        }
+    }
+
+    public bool IsAttacking => _isAttacking;
     #endregion 公用參數
 
     #region 生命週期
@@ -100,6 +124,7 @@ public class PlayerCtrl : MonoBehaviour
         InputCtrl.Play.Enable();
         //操作行為事件訂閱
         InputCtrl.Play.Jump.performed += Jump;
+        InputCtrl.Play.Attack.performed += Attack;
     }
 
     private void OnDisable()
@@ -107,6 +132,7 @@ public class PlayerCtrl : MonoBehaviour
         InputCtrl.Play.Disable();
         //操作行為事件訂閱取消
         InputCtrl.Play.Jump.performed -= Jump;
+        InputCtrl.Play.Attack.performed -= Attack;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -131,8 +157,10 @@ public class PlayerCtrl : MonoBehaviour
     {
         animaCtrl.SetBool("IsMoving", IsMoving);
         animaCtrl.SetBool("IsGrounded", IsGrounded);
+        animaCtrl.SetBool("IsAttacking", IsAttacking);
         animaCtrl.SetFloat("MoveMulti", MoveMulti);
         animaCtrl.SetFloat("VelocityY", VelocityY);
+        animaCtrl.SetInteger("Combo", Combo);
     }
     #endregion 生命週期
     /// <summary>
@@ -140,8 +168,12 @@ public class PlayerCtrl : MonoBehaviour
     /// </summary>
     void Movement()
     {
-        _velocity.z = transform.forward.z * MoveSpeed;
-        _velocity.x = transform.forward.x * MoveSpeed;
+        if (!InAction)
+        {
+            _velocity.z = transform.forward.z * MoveSpeed;
+            _velocity.x = transform.forward.x * MoveSpeed;
+        }
+
         //重力
         if (IsGrounded)
         {
@@ -162,11 +194,12 @@ public class PlayerCtrl : MonoBehaviour
     /// </summary>
     void Rota()
     {
-        if (!IsMoving) return;
+        if (InAction || !IsMoving) return;
         //轉向
         charCtrl.transform.rotation = Quaternion.LookRotation(FacingVector);
     }
 
+    #region 跳躍功能
     /// <summary>
     /// 跳躍事件
     /// </summary>
@@ -191,4 +224,45 @@ public class PlayerCtrl : MonoBehaviour
         _velocity.y = Mathf.Sqrt(2 * G * H);
         animaCtrl.SetTrigger("JumpTrigger");
     }
+    #endregion 跳躍功能
+
+    #region 攻擊功能
+    private void Attack(InputAction.CallbackContext context)
+    {
+        if (_isAttacking && _inComboWindow)
+        {
+            Combo++;
+            _inComboWindow = false;
+            AttackHandle();
+        }
+        else if (!_isAttacking)
+        {//完全停止攻擊後：連擊重啟
+            Combo = 1;
+            AttackHandle();
+        }
+    }
+
+    public void AttackHandle()
+    {
+        _velocity = IsGrounded ? Vector3.zero : Vector3.up;
+        animaCtrl.SetTrigger("AttackTrigger");
+    }
+
+    public void StartAttack()
+    {
+        _isAttacking = true;
+    }
+
+    public void EndAttack()
+    {
+        //Combo = 0;
+        _isAttacking = false;
+        _inComboWindow = false;
+    }
+
+    public void OpenComboWindow()
+    {
+        _inComboWindow = true;
+    }
+    #endregion 攻擊功能
 }

@@ -118,6 +118,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""7abb270c-4a92-44aa-aec4-db0647528ff8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -230,6 +239,28 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""Menu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b0a12658-029e-4200-87b4-c0b376491d6d"",
+                    ""path"": ""<Keyboard>/j"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b1b5434-95ce-4d0e-8eeb-8f8459e2b246"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -269,6 +300,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_Play_Move = m_Play.FindAction("Move", throwIfNotFound: true);
         m_Play_Jump = m_Play.FindAction("Jump", throwIfNotFound: true);
         m_Play_Menu = m_Play.FindAction("Menu", throwIfNotFound: true);
+        m_Play_Attack = m_Play.FindAction("Attack", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Newaction = m_UI.FindAction("New action", throwIfNotFound: true);
@@ -356,6 +388,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Play_Move;
     private readonly InputAction m_Play_Jump;
     private readonly InputAction m_Play_Menu;
+    private readonly InputAction m_Play_Attack;
     /// <summary>
     /// Provides access to input actions defined in input action map "Play".
     /// </summary>
@@ -379,6 +412,10 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Play/Menu".
         /// </summary>
         public InputAction @Menu => m_Wrapper.m_Play_Menu;
+        /// <summary>
+        /// Provides access to the underlying input action "Play/Attack".
+        /// </summary>
+        public InputAction @Attack => m_Wrapper.m_Play_Attack;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -414,6 +451,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Menu.started += instance.OnMenu;
             @Menu.performed += instance.OnMenu;
             @Menu.canceled += instance.OnMenu;
+            @Attack.started += instance.OnAttack;
+            @Attack.performed += instance.OnAttack;
+            @Attack.canceled += instance.OnAttack;
         }
 
         /// <summary>
@@ -434,6 +474,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @Menu.started -= instance.OnMenu;
             @Menu.performed -= instance.OnMenu;
             @Menu.canceled -= instance.OnMenu;
+            @Attack.started -= instance.OnAttack;
+            @Attack.performed -= instance.OnAttack;
+            @Attack.canceled -= instance.OnAttack;
         }
 
         /// <summary>
@@ -591,6 +634,13 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAttack(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

@@ -14,14 +14,14 @@ AnimatorStateMachine:
     m_Position: {x: 300, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -267873020552857641}
-    m_Position: {x: 570, y: 120, z: 0}
+    m_Position: {x: 580, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1452220989244297203}
     m_Position: {x: 300, y: -140, z: 0}
   m_ChildStateMachines:
   - serializedVersion: 1
     m_StateMachine: {fileID: 2796806564656320850}
-    m_Position: {x: 580, y: -10, z: 0}
+    m_Position: {x: 570, y: -10, z: 0}
   m_AnyStateTransitions:
   - {fileID: -6479718315332365535}
   - {fileID: -7636392463479075111}
@@ -393,6 +393,12 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: IsAttacking
     m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 9100000}
+  - m_Name: DashTrigger
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -91,6 +92,9 @@ public class PlayerCtrl : MonoBehaviour
     [SerializeField]
     private int _airJumpCountMax = 1;
     private int _airJumpCount;
+    [SerializeField]
+    private float _dashSpeed = 8f;
+    private float _dashDuration = 0.2f;
     
     private int _combo;
     private bool _inComboWindow;
@@ -318,7 +322,26 @@ public class PlayerCtrl : MonoBehaviour
 
     private void Dash(InputAction.CallbackContext context)
     {
-        
+        if (state == State.Attack || state == State.Dash) return;
+        ChangeState(State.Dash);
+        animaCtrl.SetTrigger(AniHash.DashTrigger);
+
+        _ = DashHandle();
+    }
+
+    private async Task DashHandle()
+    {
+        charCtrl.transform.rotation = Quaternion.LookRotation(transform.forward);
+        _velocity = transform.forward * _dashSpeed;
+        _velocity.y = 0;
+        //推進
+        await Task.Delay(TimeSpan.FromSeconds(_dashDuration));
+
+        if (state == State.Dash)
+        {
+            _velocity = Vector3.zero;
+            ChangeState(IsGrounded ? State.Idle : State.Jump);
+        }
     }
     #endregion 衝刺功能
 }

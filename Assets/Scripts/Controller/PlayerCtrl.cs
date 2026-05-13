@@ -54,11 +54,11 @@ public class PlayerCtrl : MonoBehaviour
                 break;
 
             case State.Move:
-                if (!IsMoving) ChangeState(State.Idle);
-                if (!IsGrounded) ChangeState(State.Jump);//下墜(無起跳過程)
                 Rota();
                 _velocity.z = transform.forward.z * MoveSpeed;
                 _velocity.x = transform.forward.x * MoveSpeed;
+                if (!IsMoving) ChangeState(State.Idle);
+                if (!IsGrounded) ChangeState(State.Jump);//下墜(無起跳過程)
                 break;
 
             case State.Jump:
@@ -198,7 +198,6 @@ public class PlayerCtrl : MonoBehaviour
     {
         StateLogic();
         AnimaUpdate();
-        
         Movement();
     }
     /// <summary>
@@ -221,27 +220,32 @@ public class PlayerCtrl : MonoBehaviour
     /// </summary>
     void Movement()
     {
-        //重力
+        Gravity();//重力
+        charCtrl.Move(Velocity);
+    }
+    /// <summary>
+    /// 重力
+    /// </summary>
+    void Gravity()
+    {
         if (IsGrounded)
         {
             _velocity.y = -1f;
             _airJumpCount = _airJumpCountMax;
             _jumpPower = 1f;
         }
-        else
+        else if (state != State.Dash)
         {
             _velocity.y -= G * Time.deltaTime;
         }
-
-        charCtrl.Move(Velocity);
     }
 
     /// <summary>
     /// 轉向事件
     /// </summary>
     void Rota()
-    {
-        //轉向
+    {//轉向
+        if (FacingVector != Vector3.zero)
         charCtrl.transform.rotation = Quaternion.LookRotation(FacingVector);
     }
     #endregion 角色物理控制
@@ -319,7 +323,6 @@ public class PlayerCtrl : MonoBehaviour
     #endregion 攻擊功能
 
     #region 衝刺功能
-
     private void Dash(InputAction.CallbackContext context)
     {
         if (state == State.Attack || state == State.Dash) return;

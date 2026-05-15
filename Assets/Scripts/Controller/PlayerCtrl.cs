@@ -122,6 +122,16 @@ public class PlayerCtrl : MonoBehaviour
         }
     }
     /// <summary>
+    /// 角度補償(攝影機側轉量)
+    /// </summary>
+    public Quaternion AngComp
+    {
+        get
+        {
+            return Quaternion.Euler(0f, GameManager.cameraRota.y, 0f);
+        }
+    }
+    /// <summary>
     /// 依據方向向量輸入判定是否在移動中
     /// </summary>
     public bool IsMoving => MoveInput != Vector2.zero;
@@ -248,7 +258,7 @@ public class PlayerCtrl : MonoBehaviour
     void Rota()
     {//轉向
         if (FacingVector != Vector3.zero)
-        charCtrl.transform.rotation = Quaternion.LookRotation(FacingVector);
+        charCtrl.transform.rotation = Quaternion.LookRotation(FacingVector) * AngComp;
     }
     #endregion 角色物理控制
 

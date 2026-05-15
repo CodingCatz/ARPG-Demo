@@ -37,6 +37,33 @@ public static class GameManager
     }
     #endregion 玩家相關資訊
 
+    #region 攝影機相關資訊
+    /// <summary>
+    /// 當前運作中攝影機
+    /// </summary>
+    public static CameraCtrl cameraCtrl { get; private set; }
+    /// <summary>
+    /// 當前運作中攝影機的旋轉參數
+    /// </summary>
+    public static Vector3 cameraRota
+    {
+        get
+        {
+            return cameraCtrl != null
+                ? cameraCtrl.transform.rotation.eulerAngles
+                : Vector3.zero;
+        }
+    }
+    /// <summary>
+    /// 設定(初始化)當前操作鏡頭
+    /// </summary>
+    /// <param name="ctrl">鏡頭控制器</param>
+    public static void SetCurrentCamera(CameraCtrl ctrl)
+    {
+        cameraCtrl = ctrl;
+    }
+    #endregion 攝影機相關資訊
+
     public static void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);

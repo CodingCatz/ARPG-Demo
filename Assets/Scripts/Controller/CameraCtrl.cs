@@ -27,9 +27,15 @@ public class CameraCtrl : MonoBehaviour
     private bool GotTarget => GPS != Vector3.zero;
     #endregion 公用參數
 
-    void Start()
+    #region 生命週期
+    private void OnEnable()
     {
-        
+        GameManager.SetCurrentCamera(this);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.SetCurrentCamera(null);
     }
 
     // Update is called once per frame
@@ -37,6 +43,7 @@ public class CameraCtrl : MonoBehaviour
     {
         Follow();
     }
+    #endregion 生命週期
 
     private void Follow()
     {

@@ -98,6 +98,8 @@ public class PlayerCtrl : MonoBehaviour
     
     private int _combo;
     private bool _inComboWindow;
+    [SerializeField]
+    private GameObject[] _skillPrefabs;
     #endregion 基本參數
 
     #region 公用參數
@@ -331,6 +333,11 @@ public class PlayerCtrl : MonoBehaviour
     public void OpenComboWindow()
     {
         _inComboWindow = true;
+    }
+
+    public void OnAttack(Transform point)
+    {
+        Instantiate(_skillPrefabs[0], point.position, point.rotation);
     }
     #endregion 攻擊功能
 

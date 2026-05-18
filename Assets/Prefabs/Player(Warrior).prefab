@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4995063884300950261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3450209303007478698}
+  m_Layer: 0
+  m_Name: HitPoint_L
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3450209303007478698
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4995063884300950261}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.10756746, y: 0.69887716, z: -0.05240265, w: 0.70516235}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 250211631549621107}
+  m_LocalEulerAnglesHint: {x: -4.5, y: 90, z: -13}
 --- !u!1 &8169682800748685439
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,6 +107,39 @@ MonoBehaviour:
   _jumpHeight: 3
   _airJumpCountMax: 1
   _dashSpeed: 16
+  _skillPrefabs:
+  - {fileID: 27245915688278233, guid: 2a7377edbcf543b43892d4f96479f481, type: 3}
+--- !u!1 &8182126292194271634
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8162380698188668070}
+  m_Layer: 0
+  m_Name: HitPoint_R
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8162380698188668070
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8182126292194271634}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.058492735, y: -0.70468336, z: 0.11372297, w: 0.6979019}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 250211631504185596}
+  m_LocalEulerAnglesHint: {x: 4.51, y: -90, z: 14}
 --- !u!1001 &5166787596834668755
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -134,7 +198,13 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: c60d22d63722cd641a8cd6009b7056e5, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4957605394338161568, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3450209303007478698}
+    - targetCorrespondingSourceObject: {fileID: 4957605394525706287, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8162380698188668070}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4957605393579145644, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
       insertIndex: -1
@@ -162,3 +232,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 886863a7ea7465e45b747c6a094ea591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _eventPoints:
+  - {fileID: 8162380698188668070}
+  - {fileID: 3450209303007478698}
+--- !u!4 &250211631504185596 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4957605394525706287, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
+  m_PrefabInstance: {fileID: 5166787596834668755}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &250211631549621107 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4957605394338161568, guid: 4f46098734d87e24490aef9267915ad2, type: 3}
+  m_PrefabInstance: {fileID: 5166787596834668755}
+  m_PrefabAsset: {fileID: 0}

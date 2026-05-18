@@ -22,6 +22,11 @@ public class AnimaCtrl : MonoBehaviour
     private PlayerCtrl playerCtrl => _playerCtrl ??= GetComponentInParent<PlayerCtrl>();
     #endregion 基礎元建
 
+    #region 動畫事件資訊
+    [SerializeField]
+    private Transform[] _eventPoints;
+    #endregion 動畫事件資訊
+
     void Start()
     {
         
@@ -58,9 +63,9 @@ public class AnimaCtrl : MonoBehaviour
 
     #region 動畫觸發事件
     public void StartAttack() => playerCtrl?.StartAttack();
-    public void OnAttack()
+    public void OnAttack(int index)
     {
-
+        playerCtrl?.OnAttack(_eventPoints[index]);
     }
     public void EndAttack() => playerCtrl?.EndAttack();
     public void OpenComboWindow() => playerCtrl?.OpenComboWindow();

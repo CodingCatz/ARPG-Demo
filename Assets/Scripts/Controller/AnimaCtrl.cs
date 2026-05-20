@@ -15,22 +15,17 @@ public class AnimaCtrl : MonoBehaviour
     /// <summary>
     /// 角色控制器元件本體
     /// </summary>
-    private PlayerCtrl _playerCtrl;
+    private BaseCtrl _baseCtrl;
     /// <summary>
     /// [延遲載入]角色控制器元件
     /// </summary>
-    private PlayerCtrl playerCtrl => _playerCtrl ??= GetComponentInParent<PlayerCtrl>();
+    private BaseCtrl baseCtrl => _baseCtrl ??= GetComponentInParent<BaseCtrl>();
     #endregion 基礎元建
 
     #region 動畫事件資訊
     [SerializeField]
     private Transform[] _eventPoints;
     #endregion 動畫事件資訊
-
-    void Start()
-    {
-        
-    }
 
     #region 動畫系統基本方法
     /// <summary>
@@ -62,13 +57,13 @@ public class AnimaCtrl : MonoBehaviour
     #endregion 動畫系統基本方法
 
     #region 動畫觸發事件
-    public void StartAttack() => playerCtrl?.StartAttack();
+    public void StartAttack() => baseCtrl?.StartAttack();
     public void OnAttack(int index)
     {
-        playerCtrl?.OnAttack(_eventPoints[index]);
+        baseCtrl?.OnAttack(_eventPoints[index]);
     }
-    public void EndAttack() => playerCtrl?.EndAttack();
-    public void OpenComboWindow() => playerCtrl?.OpenComboWindow();
+    public void EndAttack() => baseCtrl?.EndAttack();
+    public void OpenComboWindow() => baseCtrl?.OpenComboWindow();
     #endregion 動畫觸發事件
 }
 

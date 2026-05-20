@@ -164,7 +164,7 @@ public abstract class BaseCtrl : MonoBehaviour
     /// <summary>
     /// 狀態刷新
     /// </summary>
-    protected void Update()
+    protected virtual void Update()
     {
         StateLogic();
         AnimaUpdate();

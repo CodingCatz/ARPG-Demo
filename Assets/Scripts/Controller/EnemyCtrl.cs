@@ -2,17 +2,21 @@
 
 public class EnemyCtrl : BaseCtrl
 {
-    public override Vector2 MoveInput => throw new System.NotImplementedException();
+    #region AI參數
+    private Transform _target;
+    private Vector2 _aiMoveInput;
+    [SerializeField]
+    private float _chaseRange = 10f;
+    [SerializeField]
+    private float _attackRange = 2f;
+    #endregion AI參數
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public Transform Target => _target ??= GameManager.playerCtrl.transform;
+    public override Vector2 MoveInput => _aiMoveInput;
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        
+        base.Update();
     }
 }

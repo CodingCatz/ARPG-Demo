@@ -108,8 +108,8 @@ MonoBehaviour:
   _airJumpCountMax: 1
   _dashSpeed: 16
   _skillPrefabs:
-  - {fileID: 27245915688278233, guid: ae2f15eda8892b7409441203f0d06d32, type: 3}
   - {fileID: 27245915688278233, guid: 2a7377edbcf543b43892d4f96479f481, type: 3}
+  - {fileID: 27245915688278233, guid: ae2f15eda8892b7409441203f0d06d32, type: 3}
 --- !u!1 &8182126292194271634
 GameObject:
   m_ObjectHideFlags: 0

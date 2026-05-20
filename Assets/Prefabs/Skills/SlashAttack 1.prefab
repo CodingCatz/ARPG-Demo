@@ -71,10 +71,10 @@ MonoBehaviour:
   target: 1
   _hitEffectObj: {fileID: 0}
   _secondHitObj: {fileID: 27245915688278233, guid: 96ab9515748dba0478aeca7f578d1436, type: 3}
-  _secondHitDelay: 0.15
+  _secondHitDelay: 0.07
   _destroyTime: 2
   _useTargetPos: 0
-  _hitPower: 0
+  _hitPower: 0.07
   _flySpeed: 0.5
 --- !u!114 &7220784529445375135
 MonoBehaviour:

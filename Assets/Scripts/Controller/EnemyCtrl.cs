@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class EnemyCtrl : BaseCtrl
@@ -7,10 +8,16 @@ public class EnemyCtrl : BaseCtrl
     private Transform _target;
     private Vector2 _aiMoveInput;
     [SerializeField]
+    private float _patrolRange = 3f;
+    private bool _patrolling;
+    private Vector3 _patrolPos;
+    [SerializeField]
     private float _chaseRange = 10f;
     [SerializeField]
     private float _attackRange = 2f;
+
     private Vector3 _dirToTarget;
+    private Vector3 _spawnPos;
     #endregion AI參數
 
     #region 公用參數
@@ -22,6 +29,7 @@ public class EnemyCtrl : BaseCtrl
     /// AI操作輸入
     /// </summary>
     public override Vector2 MoveInput => _aiMoveInput;
+
     /// <summary>
     /// 對目標的方向向量(忽略高低差)
     /// </summary>
@@ -46,10 +54,21 @@ public class EnemyCtrl : BaseCtrl
     /// 是否處於搜索範圍內
     /// </summary>
     public bool InChaseRange => DistanceToTarget <= _chaseRange;
+    /// <summary>
+    /// 巡邏方向向量
+    /// </summary>
+    public Vector3 DirToPatrol => (_patrolPos - transform.position).normalized;
+    /// <summary>
+    /// 是否處於搜索範圍內
+    /// </summary>
+    public bool IsPatrolDone => Vector3.Distance(transform.position, _patrolPos) < 0.1f;
     #endregion 公用參數
 
     #region 生命週期(決策)
-    // Update is called once per frame
+    private void Start()
+    {//紀錄出生座標
+        _spawnPos = transform.position;
+    }
     protected override void Update()
     {
         AIDecision();
@@ -76,22 +95,31 @@ public class EnemyCtrl : BaseCtrl
             _aiMoveInput.x = DirToTarget.normalized.x;
             _aiMoveInput.y = DirToTarget.normalized.z;
         }
-        else _aiMoveInput = Vector2.zero;
+        else Patrol();
+    }
+    /// <summary>
+    /// 目標不在搜索範圍：巡邏
+    /// </summary>
+    private void Patrol()
+    {
+        if (IsPatrolDone)
+        {//隨機產生巡邏點
+            _patrolling = false;
+            _patrolPos = _spawnPos + Random.insideUnitSphere * _patrolRange;
+        }
+        else
+        {
+            //往目標方向推進
+            _aiMoveInput.x = DirToPatrol.x * 0.3f;
+            _aiMoveInput.y = DirToPatrol.z * 0.3f;
+        }
     }
     #endregion 生命週期(決策)
 
     private void Attack()
     {
-        if (IsAttacking && _inComboWindow)
-        {
-            Combo++;
-            _inComboWindow = false;
-            AttackHandle();
-        }
-        else if (!IsAttacking)
-        {//完全停止攻擊後：連擊重啟
-            Combo = 1;
-            AttackHandle();
-        }
+        charCtrl.transform.rotation = Quaternion.LookRotation(DirToTarget);
+        Combo++;
+        AttackHandle();
     }
 }

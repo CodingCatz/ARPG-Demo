@@ -60,6 +60,7 @@ public class AnimaCtrl : MonoBehaviour
     public void StartAttack() => baseCtrl?.StartAttack();
     public void OnAttack(int index)
     {
+        if (_eventPoints.Length <= 0) return;
         baseCtrl?.OnAttack(_eventPoints[index]);
     }
     public void EndAttack() => baseCtrl?.EndAttack();

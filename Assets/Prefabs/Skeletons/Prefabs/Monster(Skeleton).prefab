@@ -74,6 +74,9 @@ MonoBehaviour:
   _moveSpeed: 5
   _jumpHeight: 3
   _skillPrefabs: []
+  _patrolRange: 3
+  _chaseRange: 10
+  _attackRange: 2
 --- !u!1001 &8608158348671891514
 PrefabInstance:
   m_ObjectHideFlags: 0

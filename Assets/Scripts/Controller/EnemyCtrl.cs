@@ -55,9 +55,16 @@ public class EnemyCtrl : BaseCtrl
     /// </summary>
     public bool InChaseRange => DistanceToTarget <= _chaseRange;
     /// <summary>
-    /// 巡邏方向向量
+    /// 巡邏方位
     /// </summary>
-    public Vector3 DirToPatrol => (_patrolPos - transform.position).normalized;
+    public Vector3 DirToPatrol 
+    {
+        get
+        {
+            _patrolPos.y = 0;
+            return (_patrolPos - transform.position).normalized;
+        }
+    }
     /// <summary>
     /// 是否處於搜索範圍內
     /// </summary>
@@ -66,8 +73,9 @@ public class EnemyCtrl : BaseCtrl
 
     #region 生命週期(決策)
     private void Start()
-    {//紀錄出生座標
+    {//紀錄出生座標 & 巡邏原點
         _spawnPos = transform.position;
+        _patrolPos = transform.position;
     }
     protected override void Update()
     {
@@ -104,7 +112,6 @@ public class EnemyCtrl : BaseCtrl
     {
         if (IsPatrolDone)
         {//隨機產生巡邏點
-            _patrolling = false;
             _patrolPos = _spawnPos + Random.insideUnitSphere * _patrolRange;
         }
         else

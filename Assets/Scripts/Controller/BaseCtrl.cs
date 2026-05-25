@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// 角色控制器抽象層
@@ -29,7 +30,7 @@ public abstract class BaseCtrl : MonoBehaviour
     /// <summary>
     /// 狀態機定義
     /// </summary>
-    public enum State { Idle, Move, Jump, Dash, Attack }
+    public enum State { Idle, Move, Jump, Dash, Attack, Hit, Dead }
     /// <summary>
     /// 角色當前狀態
     /// </summary>
@@ -93,6 +94,22 @@ public abstract class BaseCtrl : MonoBehaviour
     [SerializeField]
     protected GameObject[] _skillPrefabs;
     #endregion 基本參數
+
+    #region 角色屬性參數
+    /// <summary>
+    /// 最大生命值
+    /// </summary>
+    [SerializeField]
+    protected float _maxHP = 100f;
+    /// <summary>
+    /// 當前的生命值
+    /// </summary>
+    protected float _HP;
+    //===== 屬性公用參數 =====
+    public float CurrentHP => _HP;
+    public float MaxHP => _maxHP;
+    public bool IsDead => state == State.Dead;
+    #endregion 角色屬性參數
 
     #region 抽象公用屬性參數
     /// <summary>
@@ -161,6 +178,10 @@ public abstract class BaseCtrl : MonoBehaviour
     #endregion 抽象公用屬性參數
 
     #region 生命週期
+    protected virtual void Awake()
+    {
+        _HP = _maxHP;//登場回滿血(初始化)
+    }
     /// <summary>
     /// 狀態刷新
     /// </summary>
@@ -233,6 +254,41 @@ public abstract class BaseCtrl : MonoBehaviour
     }
 
     #endregion 基礎動作與戰鬥
+
+    #region 受擊與傷害邏輯
+    /// <summary>
+    /// 共通傷害執行接口
+    /// </summary>
+    /// <param name="damage">傷害值</param>
+    public virtual void TakeDamage(float damage)
+    {
+        if (IsDead) return;//避免鞭屍
+        _HP -= damage;
+        if (damage > 0) HitHandle();
+        if (_HP <= 0) Die();
+    }
+    /// <summary>
+    /// 觸發受傷狀態與動畫
+    /// </summary>
+    protected virtual void HitHandle()
+    {
+        ChangeState(State.Hit);
+        _velocity.x = 0;
+        _velocity.z = 0;
+        animaCtrl.SetTrigger(AniHash.HitTrigger);
+    }
+    /// <summary>
+    /// 觸發死亡狀態與動畫
+    /// </summary>
+    protected virtual void Die()
+    {
+        _HP = 0;
+        ChangeState(State.Dead);
+        _velocity = Vector3.zero;
+        charCtrl.enabled = false;
+        animaCtrl.SetTrigger(AniHash.DeadTrigger);
+    }
+    #endregion 受擊與傷害邏輯
 
     #region 動畫控制取用
     public void StartAttack() => _inComboWindow = false;

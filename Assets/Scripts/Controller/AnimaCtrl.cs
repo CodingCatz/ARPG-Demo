@@ -80,6 +80,8 @@ public static class AniHash
     public static readonly int JumpTrigger = Animator.StringToHash("JumpTrigger");
     public static readonly int DashTrigger = Animator.StringToHash("DashTrigger");
     public static readonly int AttackTrigger = Animator.StringToHash("AttackTrigger");
+    public static readonly int HitTrigger = Animator.StringToHash("HitTrigger");
+    public static readonly int DeadTrigger = Animator.StringToHash("DeadTrigger");
 
     public static readonly int VelocityY = Animator.StringToHash("VelocityY");
     public static readonly int MoveMulti = Animator.StringToHash("MoveMulti");

@@ -49,6 +49,12 @@ public class SkillCtrl : MonoBehaviour
         }
     }
     /// <summary>
+    /// 基本傷害
+    /// </summary>
+    [SerializeField]
+    private float _damage = 10f;
+
+    /// <summary>
     /// 撞擊效果
     /// </summary>
     [SerializeField]
@@ -119,8 +125,13 @@ public class SkillCtrl : MonoBehaviour
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == Tag)
+        if (other.CompareTag(Tag))
         {
+            BaseCtrl actor = other.GetComponent<BaseCtrl>();
+            if (!actor) return;
+
+            actor.TakeDamage(_damage);
+
             SceondHit(_useTargetPos ? other.transform : transform);
 
             if(_hitEffectObj) _hitEffectObj.SetActive(true);

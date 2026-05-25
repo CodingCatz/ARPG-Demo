@@ -76,6 +76,7 @@ public static class AniHash
     public static readonly int IsMoving = Animator.StringToHash("IsMoving");
     public static readonly int IsGrounded = Animator.StringToHash("IsGrounded");
     public static readonly int IsAttacking = Animator.StringToHash("IsAttacking");
+    public static readonly int IsDead = Animator.StringToHash("IsDead");
 
     public static readonly int JumpTrigger = Animator.StringToHash("JumpTrigger");
     public static readonly int DashTrigger = Animator.StringToHash("DashTrigger");

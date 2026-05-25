@@ -298,6 +298,12 @@ public abstract class BaseCtrl : MonoBehaviour
         //charCtrl.enabled = false;
         animaCtrl.SetTrigger(AniHash.DeadTrigger);
     }
+
+    public void EndHit()
+    {
+        if (state == State.Hit)
+            ChangeState(IsGrounded ? State.Idle : State.Jump);
+    }
     #endregion 受擊與傷害邏輯
 
     #region 動畫控制取用
@@ -315,7 +321,7 @@ public abstract class BaseCtrl : MonoBehaviour
     public void OnAttack(Transform point)
     {
         if (_skillPrefabs == null || _skillPrefabs.Length == 0) return;
-        Instantiate(_skillPrefabs[0], point.position, point.rotation);
+        Instantiate(_skillPrefabs[0], point.position, transform.rotation);
     }
     #endregion 動畫控制取用
 }

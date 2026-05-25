@@ -73,10 +73,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 5
   _jumpHeight: 3
-  _skillPrefabs: []
+  _skillPrefabs:
+  - {fileID: 27245915688278233, guid: b7259f9471cc88349bf6d6932db72b14, type: 3}
+  _maxHP: 100
   _patrolRange: 3
   _chaseRange: 10
   _attackRange: 2
+  _attackCD: 2
 --- !u!1001 &8608158348671891514
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -179,4 +182,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 886863a7ea7465e45b747c6a094ea591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _eventPoints: []
+  _eventPoints:
+  - {fileID: 9005051052808727678}
+--- !u!4 &9005051052808727678 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8390755517000231868, guid: 8624151ff76b77c489cd541f6427435f, type: 3}
+  m_PrefabInstance: {fileID: 8608158348671891514}
+  m_PrefabAsset: {fileID: 0}

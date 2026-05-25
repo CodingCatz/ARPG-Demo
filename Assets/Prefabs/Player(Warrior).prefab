@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 4062802144002076872}
   m_Layer: 0
   m_Name: Player(Warrior)
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,14 +102,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21bcf5bf94889044d9153bd036e1aaaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
   _moveSpeed: 5
   _jumpHeight: 3
-  _airJumpCountMax: 1
-  _dashSpeed: 16
   _skillPrefabs:
   - {fileID: 27245915688278233, guid: 2a7377edbcf543b43892d4f96479f481, type: 3}
   - {fileID: 27245915688278233, guid: ae2f15eda8892b7409441203f0d06d32, type: 3}
+  _maxHP: 100
+  _airJumpCountMax: 1
+  _dashSpeed: 16
 --- !u!1 &8182126292194271634
 GameObject:
   m_ObjectHideFlags: 0

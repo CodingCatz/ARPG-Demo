@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -34,6 +35,25 @@ public static class GameManager
     public static void SetCurrentPlayer(PlayerCtrl ctrl)
     {
         playerCtrl = ctrl;
+    }
+    /// <summary>
+    /// 連結HPBarUI的動作
+    /// </summary>
+    public static Action<float, float> UpdatePlayerHPBar { get; private set; }
+
+    public static void SetPlayerHPBar(Action<float, float> action)
+    {
+        UpdatePlayerHPBar += action;
+        //玩家已存在的話立刻更新一次
+        if (playerCtrl) UpdatePlayerHPBar(playerCtrl.CurrentHP, playerCtrl.MaxHP);
+    }
+    public static void RemovePlayerHPBar(Action<float, float> action)
+    {
+        UpdatePlayerHPBar -= action;
+    }
+    public static void ClearPlayerHPBar()
+    {
+        UpdatePlayerHPBar = null;
     }
     #endregion 玩家相關資訊
 

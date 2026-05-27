@@ -49,6 +49,7 @@ public class PlayerCtrl : BaseCtrl
     private void OnEnable()
     {
         GameManager.SetCurrentPlayer(this);
+        SetOnHPChangedEvent(GameManager.UpdatePlayerHPBar);
         InputCtrl.Play.Enable();
         //操作行為事件訂閱
         InputCtrl.Play.Jump.performed += Jump;
@@ -60,6 +61,7 @@ public class PlayerCtrl : BaseCtrl
     private void OnDisable()
     {
         GameManager.SetCurrentPlayer(null);
+        SetOnHPChangedEvent(null);
         InputCtrl.Play.Disable();
         //操作行為事件訂閱取消
         InputCtrl.Play.Jump.performed -= Jump;

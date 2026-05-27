@@ -12,6 +12,13 @@ public class UIPlayerInfoCtrl : MonoBehaviour
     private Image _headImg;
     [SerializeField]
     private TextMeshProUGUI _nameText;
+    [SerializeField]
+    private Image _hpBarImg;
+    [SerializeField]
+    private TextMeshProUGUI _hpBarText;
+
+    private float _HP;
+    private float _maxHP;
     #endregion 基礎元件
 
     #region 公用參數
@@ -19,6 +26,8 @@ public class UIPlayerInfoCtrl : MonoBehaviour
     /// 玩家的索引(編號)
     /// </summary>
     private int PlayerIndex => GameManager.playerIndex;
+    private string StrHP => $"{(int)_HP}/{(int)_maxHP}";
+    private float PercentHP => _HP / _maxHP;
     #endregion 公用參數
 
     /// <summary>
@@ -27,6 +36,17 @@ public class UIPlayerInfoCtrl : MonoBehaviour
     private void OnEnable()
     {
         InitialUI();
+        GameManager.SetPlayerHPBar(UpdateHPBar);
+    }
+
+    private void OnDisable()
+    {
+        GameManager.RemovePlayerHPBar(UpdateHPBar);
+    }
+
+    private void OnDestroy()
+    {
+        GameManager.RemovePlayerHPBar(UpdateHPBar);
     }
 
     /// <summary>
@@ -38,9 +58,16 @@ public class UIPlayerInfoCtrl : MonoBehaviour
         _nameText.text = _playerDB.GetPlayerData(PlayerIndex).name;
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// 更新血量功能
+    /// </summary>
+    /// <param name="HP">血量</param>
+    /// <param name="maxHP">血量最大值</param>
+    private void UpdateHPBar(float HP, float maxHP)
     {
-        
+        _HP = HP;
+        _maxHP = maxHP;
+        _hpBarText.text = StrHP;
+        _hpBarImg.fillAmount = PercentHP;
     }
 }

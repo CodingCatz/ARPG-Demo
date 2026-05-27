@@ -30,12 +30,12 @@ public class CameraCtrl : MonoBehaviour
     #region 生命週期
     private void OnEnable()
     {
-        GameManager.SetCurrentCamera(this);
+        
     }
 
     private void OnDisable()
     {
-        GameManager.SetCurrentCamera(null);
+        
     }
 
     // Update is called once per frame

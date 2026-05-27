@@ -35,7 +35,7 @@ public class PlayerCtrl : BaseCtrl
     {
         get
         {
-            return Quaternion.Euler(0f, GameManager.cameraRota.y, 0f);
+            return Quaternion.Euler(0f, GameManager.mainCameraRota.y, 0f);
         }
     }
    

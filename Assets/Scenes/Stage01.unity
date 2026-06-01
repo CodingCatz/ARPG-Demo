@@ -1334,8 +1334,8 @@ MonoBehaviour:
   _jumpHeight: 3
   _skillPrefabs: []
   _maxHP: 1000
-  _patrolRange: 3
-  _chaseRange: 10
+  _patrolRange: 0
+  _chaseRange: 40
   _attackRange: 2
   _attackCD: 2
   _p2Threshold: 0.7

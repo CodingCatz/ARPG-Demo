@@ -63,23 +63,19 @@ public class BossCtrl : EnemyCtrl
     #endregion 訂閱事件
 
     #region 生命週期
-    protected override void Awake()
-    {
-        base.Awake();//回滿血(初始化)
-        GameManager.SetCurrentBoss(this);
-    }
 
     protected override void Update()
     {
         if (_lastPhase != Phase.P0) base.Update();
-
+        //BOSS特技
     }
 
     public async Task Ready(float time)
     {
         await Task.Delay(TimeSpan.FromSeconds(time));
-        _lastPhase = Phase.P1;
-        animaCtrl.SetLayerWeight(1, 0f);
+        _lastPhase = Phase.P1;//進入第一階段
+        animaCtrl.SetLayerWeight(1, 0f);//準備動畫(表演層)關閉
+        GameManager.SetCurrentBoss(this);//正式初始化
     }
     #endregion 生命週期
 

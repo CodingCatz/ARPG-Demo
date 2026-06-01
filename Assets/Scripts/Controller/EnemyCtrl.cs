@@ -68,6 +68,7 @@ public class EnemyCtrl : BaseCtrl
             return (_patrolPos - transform.position).normalized;
         }
     }
+    public bool CanPatrol => _patrolRange > 0;
     /// <summary>
     /// 是否處於搜索範圍內
     /// </summary>
@@ -120,7 +121,7 @@ public class EnemyCtrl : BaseCtrl
             _aiMoveInput.x = DirToTarget.normalized.x;
             _aiMoveInput.y = DirToTarget.normalized.z;
         }
-        else Patrol();
+        else if (CanPatrol) Patrol();
     }
     /// <summary>
     /// 目標不在搜索範圍：巡邏

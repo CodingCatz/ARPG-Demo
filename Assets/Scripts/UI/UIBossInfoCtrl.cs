@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class UIBossInfoCtrl : MonoBehaviour
+public class UIBossInfoCtrl : UIPanelCtrl
 {
     #region 基礎元件
     [SerializeField]
@@ -13,6 +13,7 @@ public class UIBossInfoCtrl : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI _hpBarText;
 
+    private bool _isReady;
     private float _HP;
     private float _maxHP;
     private string StrHP => $"{(int)_HP}/{(int)_maxHP}";
@@ -44,5 +45,11 @@ public class UIBossInfoCtrl : MonoBehaviour
         _maxHP = maxHP;
         _hpBarText.text = StrHP;
         _hpBarImg.fillAmount = PercentHP;
+        //第一次執行時初始
+        if (!_isReady && _maxHP > 0)
+        {
+            Switch(true);
+            _isReady = true;
+        }
     }
 }

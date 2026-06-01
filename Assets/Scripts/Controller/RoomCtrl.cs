@@ -1,19 +1,35 @@
-﻿using UnityEngine;
-using Unity.Cinemachine;
+﻿using Unity.Cinemachine;
+using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.UI;
 
 public class RoomCtrl : MonoBehaviour
 {
     #region 基礎元建
     [SerializeField]
     private CinemachineCamera cinemachineCamera;
-
+    [SerializeField]
+    private PlayableDirector director;
+    [SerializeField]
+    private Collider doorBlock;
     #endregion 基礎元建
     private const string Tag = "Player";
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(Tag))
         {
-            cinemachineCamera.PreviousStateIsValid = true;
+            director.Play();
+            doorBlock.isTrigger = false;
+            cinemachineCamera.Priority.Value = 100;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag(Tag))
+        {
+            cinemachineCamera.Priority.Value = 0;
         }
     }
 }

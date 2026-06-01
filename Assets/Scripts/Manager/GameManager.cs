@@ -74,6 +74,34 @@ public static class GameManager
     }
     #endregion 主攝影機相關
 
+    #region Boss相關資訊
+    public static BossCtrl bossCtrl { get; private set; }
+    /// <summary>
+    /// 連結BossHPBarUI的動作
+    /// </summary> 
+    public static Action<float, float> UpdateBossHPBar { get; private set; }
+    /// <summary>
+    /// 設定(初始化)當前BOSS
+    /// </summary>
+    /// <param name="ctrl">BOSS控制器</param>
+    public static void SetCurrentBoss(BossCtrl ctrl)
+    {
+        bossCtrl = ctrl;
+        bossCtrl.onHPChanged += UpdateBossHPBar;
+        UpdateBossHPBar?.Invoke(bossCtrl.CurrentHP, bossCtrl.MaxHP);
+    }
+
+    public static void SetBossHPBar(Action<float, float> action)
+    {
+        UpdateBossHPBar += action;
+        if (bossCtrl) UpdateBossHPBar(bossCtrl.CurrentHP, bossCtrl.MaxHP);
+    }
+    public static void RemoveBossHPBar(Action<float, float> action)
+    {
+        UpdateBossHPBar -= action;
+    }
+    #endregion Boss相關資訊
+
     public static void LoadScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);

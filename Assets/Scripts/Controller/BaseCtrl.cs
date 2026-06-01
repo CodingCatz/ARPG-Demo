@@ -109,6 +109,8 @@ public abstract class BaseCtrl : MonoBehaviour
     //===== 屬性公用參數 =====
     public float CurrentHP => _HP;
     public float MaxHP => _maxHP;
+
+    public float PercentHP => _HP / _maxHP;
     public bool IsDead => state == State.Dead;
     #endregion 角色屬性參數
 

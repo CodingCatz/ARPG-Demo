@@ -62,6 +62,11 @@ public class BossCtrl : EnemyCtrl
     /// 是否為無敵狀態
     /// </summary>
     private bool _isInvincible = false;
+
+
+    private float _skillGCD = 3f;
+    private float _skillTimer = 0f;
+    private bool CanCastSkill => _skillTimer >= _skillGCD;
     #endregion 專用屬性參數
 
     #region 招式資料庫
@@ -71,6 +76,18 @@ public class BossCtrl : EnemyCtrl
     /// 施放中的招式索引號碼
     /// </summary>
     private int _castSkillIndex = -1;
+    /// <summary>
+    /// 抽取技能時的權重分母
+    /// </summary>
+    private int totalWeight = 0;
+    /// <summary>
+    /// 符合施放條件的技能清單
+    /// </summary>
+    private List<int> skillList = new List<int>();
+    /// <summary>
+    /// 施放中的技能
+    /// </summary>
+    private BossSkillDB castingSkill;
     #endregion 招式資料庫
 
     #region 訂閱事件
@@ -88,10 +105,18 @@ public class BossCtrl : EnemyCtrl
 
     protected override void Update()
     {
-        if (_lastPhase != Phase.P0) base.Update();
-        //BOSS特技
+        if (_lastPhase != Phase.P0)
+        {
+            base.Update();
+            //BOSS特技
+            SkillCooldown();
+        }
     }
-
+    /// <summary>
+    /// 預備任務
+    /// </summary>
+    /// <param name="time">需時</param>
+    /// <returns></returns>
     public async Task Ready(float time)
     {
         await Task.Delay(TimeSpan.FromSeconds(time));
@@ -99,25 +124,35 @@ public class BossCtrl : EnemyCtrl
         animaCtrl.SetLayerWeight(1, 0f);//準備動畫(表演層)關閉
         GameManager.SetCurrentBoss(this);//正式初始化
     }
+
+    private void SkillCooldown()
+    {
+        if (CanCastSkill)
+        {
+            Attack();
+            _skillTimer = 0;
+        }
+        else
+        {
+            _skillTimer += Time.deltaTime;
+        }
+    }
     #endregion 生命週期
 
     #region 攻擊行為(招式抽取)
     private void Attack()
     {//不能攻擊或正在切換狀態：不執行Attack
         if (!CanAttack || _inPhaseTrans) return;
-        castingSkill = _skills[ChooseSkill()];
-        ChangeState(State.Attack);
-        animaCtrl.SetTrigger(castingSkill.triggerHash);//播放攻擊動畫(前搖)
+        _castSkillIndex = ChooseSkill();
+        if (_castSkillIndex > 0)
+        {
+            castingSkill = _skills[_castSkillIndex];
+            ChangeState(State.Attack);
+            animaCtrl.SetTrigger(castingSkill.triggerHash);//播放攻擊動畫(前搖)
+        }
+        
     }
-    /// <summary>
-    /// 抽取技能時的權重分母
-    /// </summary>
-    private int totalWeight = 0;
-    /// <summary>
-    /// 符合施放條件的技能清單
-    /// </summary>
-    private List<int> skillList = new List<int>();
-    private BossSkillDB castingSkill;
+    
     /// <summary>
     /// 抽選技能
     /// </summary>
@@ -128,17 +163,17 @@ public class BossCtrl : EnemyCtrl
 
         totalWeight = 0;//權重分母
         skillList.Clear();//清空技能備選清單
-        int skillIndex = -1;//起點
+        _castSkillIndex = -1;//起點重置
 
         foreach (BossSkillDB skill in _skills)
         {//遍歷SkillDB
-            skillIndex++;//流水號
+            _castSkillIndex++;//流水號
             if (skill == null || skill.weight <= 0) continue;//該輪跳過
             //if (冷卻未到) continue;
             if (DistanceToTarget < skill.minRange || DistanceToTarget > skill.maxRange) continue;//不再施放範圍內
             if (!IsAllowedPhases(skill.allowedPhases)) continue;//不再施放階段內
             totalWeight += skill.weight;//計算權重分母
-            skillList.Add(skillIndex);
+            skillList.Add(_castSkillIndex);
         }
 
         int roll = Random.Range(0, totalWeight);
@@ -177,7 +212,7 @@ public class BossCtrl : EnemyCtrl
     public override void OnAttack(Transform point)
     {
         if (!castingSkill) return;
-        Instantiate(castingSkill, point.position, transform.rotation);
+        Instantiate(castingSkill.skillPrefab, point.position, transform.rotation);
     }
     #endregion 攻擊行為(招式抽取)
 

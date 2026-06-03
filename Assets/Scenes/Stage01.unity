@@ -1341,6 +1341,11 @@ MonoBehaviour:
   _p2Threshold: 0.7
   _p3Threshold: 0.3
   _ptDuration: 3
+  _skills:
+  - {fileID: 11400000, guid: edc62a19f5a6dc1458ed196614cfd1a0, type: 2}
+  - {fileID: 11400000, guid: edc62a19f5a6dc1458ed196614cfd1a0, type: 2}
+  - {fileID: 11400000, guid: edc62a19f5a6dc1458ed196614cfd1a0, type: 2}
+  - {fileID: 11400000, guid: edc62a19f5a6dc1458ed196614cfd1a0, type: 2}
 --- !u!1 &367147198
 GameObject:
   m_ObjectHideFlags: 0

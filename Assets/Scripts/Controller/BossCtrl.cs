@@ -11,6 +11,18 @@ public class BossCtrl : EnemyCtrl
     /// </summary>
     public enum Phase { P0, P1, P2, P3 }
     /// <summary>
+    /// 階段組合標籤(Flags複選標籤)
+    /// </summary>
+    [Flags]
+    public enum PhaseFlag
+    {
+        None = 0,
+        P1 = 1 << 0,//1
+        P2 = 1 << 1,//10
+        P3 = 1 << 2,//100
+        All = P1 | P2 | P3//111
+    }
+    /// <summary>
     /// 當前的狀態階段(用HP百分比計算)
     /// </summary>
     private Phase _currentPhase
@@ -50,6 +62,15 @@ public class BossCtrl : EnemyCtrl
     /// </summary>
     private bool _isInvincible = false;
     #endregion 專用屬性參數
+
+    #region 招式資料庫
+    [SerializeField]
+    private BossSkillDB[] _skills;
+    /// <summary>
+    /// 施放中的招式索引號碼
+    /// </summary>
+    private int _castSkillIndex = -1;
+    #endregion 招式資料庫
 
     #region 訂閱事件
     /// <summary>

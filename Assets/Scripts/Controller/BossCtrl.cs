@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using static BossCtrl;
+using Random = UnityEngine.Random;
 
 public class BossCtrl : EnemyCtrl
 {
@@ -99,6 +100,86 @@ public class BossCtrl : EnemyCtrl
         GameManager.SetCurrentBoss(this);//正式初始化
     }
     #endregion 生命週期
+
+    #region 攻擊行為(招式抽取)
+    private void Attack()
+    {//不能攻擊或正在切換狀態：不執行Attack
+        if (!CanAttack || _inPhaseTrans) return;
+        castingSkill = _skills[ChooseSkill()];
+        ChangeState(State.Attack);
+        animaCtrl.SetTrigger(castingSkill.triggerHash);//播放攻擊動畫(前搖)
+    }
+    /// <summary>
+    /// 抽取技能時的權重分母
+    /// </summary>
+    private int totalWeight = 0;
+    /// <summary>
+    /// 符合施放條件的技能清單
+    /// </summary>
+    private List<int> skillList = new List<int>();
+    private BossSkillDB castingSkill;
+    /// <summary>
+    /// 抽選技能
+    /// </summary>
+    /// <returns>技能的序號</returns>
+    private int ChooseSkill()
+    {
+        if (_skills.Length == 0) return -1;
+
+        totalWeight = 0;//權重分母
+        skillList.Clear();//清空技能備選清單
+        int skillIndex = -1;//起點
+
+        foreach (BossSkillDB skill in _skills)
+        {//遍歷SkillDB
+            skillIndex++;//流水號
+            if (skill == null || skill.weight <= 0) continue;//該輪跳過
+            //if (冷卻未到) continue;
+            if (DistanceToTarget < skill.minRange || DistanceToTarget > skill.maxRange) continue;//不再施放範圍內
+            if (!IsAllowedPhases(skill.allowedPhases)) continue;//不再施放階段內
+            totalWeight += skill.weight;//計算權重分母
+            skillList.Add(skillIndex);
+        }
+
+        int roll = Random.Range(0, totalWeight);
+        foreach (int index in skillList) 
+        {
+            if (roll < _skills[index].weight) return index;
+            else roll -= _skills[index].weight;
+        }
+        return -1;
+    }
+    /// <summary>
+    /// 階段檢定
+    /// </summary>
+    /// <param name="flag">階段旗標</param>
+    /// <returns>是否包含</returns>
+    private bool IsAllowedPhases(PhaseFlag flag)
+    {
+        
+        return _currentPhase switch
+        {
+            Phase.P1 => (flag & PhaseFlag.P1) != 0,
+            Phase.P2 => (flag & PhaseFlag.P2) != 0,
+            Phase.P3 => (flag & PhaseFlag.P3) != 0,
+            _ => false,
+        };
+        /*
+        switch (_currentPhase)
+        {
+            case Phase.P1: return (flag & PhaseFlag.P1) != 0;
+            case Phase.P2: return (flag & PhaseFlag.P2) != 0;
+            case Phase.P3: return (flag & PhaseFlag.P3) != 0;
+            default: return false;
+        }*/
+    }
+
+    public override void OnAttack(Transform point)
+    {
+        if (!castingSkill) return;
+        Instantiate(castingSkill, point.position, transform.rotation);
+    }
+    #endregion 攻擊行為(招式抽取)
 
     #region 傷害階段切換
     public override void TakeDamage(float damage)

@@ -12,6 +12,7 @@ public class BossSkillDB : ScriptableObject
     /// 觸發動畫的Trigger名稱
     /// </summary>
     public string aniTriggerName;
+    public int triggerHash => Animator.StringToHash(aniTriggerName);
     #endregion 識別訊息
 
     #region 投射物設定

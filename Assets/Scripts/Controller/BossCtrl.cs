@@ -140,17 +140,18 @@ public class BossCtrl : EnemyCtrl
     #endregion 生命週期
 
     #region 攻擊行為(招式抽取)
-    private void Attack()
+    protected override void Attack()
     {//不能攻擊或正在切換狀態：不執行Attack
         if (!CanAttack || _inPhaseTrans) return;
         _castSkillIndex = ChooseSkill();
         if (_castSkillIndex > 0)
         {
+            charCtrl.transform.rotation = Quaternion.LookRotation(DirToTarget);//死盯著目標對象
             castingSkill = _skills[_castSkillIndex];
             ChangeState(State.Attack);
             animaCtrl.SetTrigger(castingSkill.triggerHash);//播放攻擊動畫(前搖)
         }
-        
+        else base.Attack();
     }
     
     /// <summary>
@@ -191,7 +192,6 @@ public class BossCtrl : EnemyCtrl
     /// <returns>是否包含</returns>
     private bool IsAllowedPhases(PhaseFlag flag)
     {
-        
         return _currentPhase switch
         {
             Phase.P1 => (flag & PhaseFlag.P1) != 0,

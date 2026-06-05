@@ -59,6 +59,8 @@ public class SkillCtrl : MonoBehaviour
     /// </summary>
     [SerializeField]
     private GameObject _hitEffectObj;
+    [SerializeField]
+    private AudioClip _hitSound;
     /// <summary>
     /// [二段]次級效果
     /// </summary>
@@ -135,6 +137,7 @@ public class SkillCtrl : MonoBehaviour
             SceondHit(_useTargetPos ? other.transform : transform);
 
             if(_hitEffectObj) _hitEffectObj.SetActive(true);
+            if(_hitSound) AudioSource.PlayClipAtPoint(_hitSound, transform.position);
             if (HitShock) impulseSource.GenerateImpulseWithForce(_hitPower);
         }
     }

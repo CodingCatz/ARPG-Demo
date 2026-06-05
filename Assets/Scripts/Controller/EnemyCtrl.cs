@@ -142,7 +142,7 @@ public class EnemyCtrl : BaseCtrl
     #endregion 生命週期(決策)
 
     #region 戰鬥行動
-    private void Attack()
+    protected virtual void Attack()
     {
         if (CanAttack)
         {//冷卻完成發動攻擊

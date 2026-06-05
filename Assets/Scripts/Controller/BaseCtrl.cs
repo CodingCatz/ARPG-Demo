@@ -105,6 +105,8 @@ public abstract class BaseCtrl : MonoBehaviour
     /// 當前的生命值
     /// </summary>
     protected float _HP;
+    [SerializeField]
+    protected float _breakDef;
     public event Action<float, float> OnHPChanged;
     //===== 屬性公用參數 =====
     public float CurrentHP => _HP;
@@ -283,7 +285,7 @@ public abstract class BaseCtrl : MonoBehaviour
         _HP -= damage;
         if (damage > 0)
         {
-            HitHandle();
+            HitHandle(damage);
             //有UI事件訂閱：執行數值傳遞
             OnHPChanged?.Invoke(CurrentHP, MaxHP);
         }
@@ -292,12 +294,12 @@ public abstract class BaseCtrl : MonoBehaviour
     /// <summary>
     /// 觸發受傷狀態與動畫
     /// </summary>
-    protected virtual void HitHandle()
+    protected virtual void HitHandle(float damage)
     {
         ChangeState(State.Hit);
         _velocity.x = 0;
         _velocity.z = 0;
-        animaCtrl.SetTrigger(AniHash.HitTrigger);
+        if(damage > _breakDef) animaCtrl.SetTrigger(AniHash.HitTrigger);
     }
     /// <summary>
     /// 觸發死亡狀態與動畫
